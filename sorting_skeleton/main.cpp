@@ -61,6 +61,64 @@ void timerExample() {
 //                        const std::vector<City>& masterData) {
 //     // Your code here
 // }
+void handleSortCommand(const std::string& algorithmName,
+                       const std::string& fieldName,
+                       const std::vector<City>& masterData) {
+    // 1. new copy of masterData
+    std::vector<City> dataCopy = masterData;
+
+    // 2. Define comparator with lambda
+    std::function<bool(const City&, const City&)> comp;
+
+    if (fieldName == "population") {
+        comp = [](const City& a, const City& b) {
+            return a.getPopulation() < b.getPopulation();
+        };
+    } else if (fieldName == "city") {
+        comp = [](const City& a, const City& b) {
+            return a.getCity() < b.getCity();
+        };
+    } else if (fieldName == "country") {
+        comp = [](const City& a, const City& b) {
+            return a.getCountry() < b.getCountry();
+        };
+    } else if (fieldName == "latitude") {
+        comp = [](const City& a, const City& b) {
+            return a.getLatitude() < b.getLatitude();
+        };
+    } else {
+        std::cerr << "Error: Invalid field name: " << fieldName << std::endl;
+        return;
+    }
+
+    // 3. Sort and time with right algorithm
+    Timer timer;
+    timer.start();
+
+    if (algorithmName == "insertionSort") {
+        // insertionSort(dataCopy, comp);
+        std::cout << "Insertion Sort not implemented yet." << std::endl;
+    } else if (algorithmName == "mergeSort") {
+        // mergeSort(dataCopy, comp);
+        std::cout << "Merge Sort not implemented yet." << std::endl;
+    } else {
+        std::cerr << "Error: Invalid algorithm name: " << algorithmName << std::endl;
+        return;
+    }
+    timer.stop();
+
+    // 4. Print top 10 results
+    int printCount = std::min(10, static_cast<int>(dataCopy.size()));
+    for (int i = 0; i < printCount; ++i) {
+        std::cout << (i + 1) << ". " << dataCopy[i] << std::endl;
+    }
+
+    // Print elapsed time
+    std::cout << "Sorted with " << fieldName << " using " << algorithmName
+              << " (time: " << std::fixed << std::setprecision(2)
+              << timer.elapsedMilliseconds() << " ms)" << std::endl;
+
+}
 
 
 int main() {
