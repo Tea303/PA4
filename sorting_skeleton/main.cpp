@@ -16,12 +16,14 @@
 #include <vector>
 #include <functional>
 #include <iomanip>
+#include <fstream>
 
 
 #include "Timer.h"
 
 // TODO: #include your City.h and Sorting.h headers here
 #include "City.h"
+#include "Sorting.h"
 
 // ----------------------------------------------------------------
 // Timer usage example (delete this function once you understand it)
@@ -41,6 +43,55 @@ void timerExample() {
               << std::fixed << std::setprecision(2)
               << timer.elapsedMilliseconds() << " ms" << std::endl;
     std::cout << "(sum = " << sum << ")" << std::endl;
+}
+
+//----------------------------------------------------------------
+// CSV parsing utility
+//----------------------------------------------------------------
+
+//func to load the CSV into a vector of City
+std::vector<City> loadCities(const std::string& filename) {
+    std::vector<City> cities;
+    std::ifstream file(filename);
+
+    if (!file.is_open()) {
+        std::cerr << "Error: Could NOT open file " << filename << std::endl;
+        return cities; // return empty when error
+    }
+
+    std::string line;
+    std::getline(file, line); // skip header
+
+    while (std::getline(file, line)) {
+        // code snipit from online tutorial
+        if (line.empty() && line.back() == '\r') {
+            line.pop_back(); // Remove trailing carriage return if present
+        }
+
+        std:: vector<std::string> fields = parseCSVLine(line);
+        if (fields.size() < 10) continue; // safe check
+
+        std::string city = fields[0];
+        std::string country = fields[4];
+        
+        double lat = 0.0;
+        if (!fields[2].empty()) {
+            try {
+                lat = std::stod(fields[2]);
+            } catch (...) {lat = 0.0;}
+        }
+
+        long popu = 0;
+        if (!fields[9].empty()) {
+            try { popu = static_cast<long>(std::stoll(fields[9])); } 
+            catch (...) {popu = 0;}
+    }
+
+        cities.emplace_back(city, country, lat, popu);
+    }
+
+    file.close();
+    return cities;
 }
 
 // ----------------------------------------------------------------
