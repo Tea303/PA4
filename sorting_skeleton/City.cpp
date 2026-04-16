@@ -12,6 +12,6 @@ long City::getPopulation() const { return population; }
 double City::getLatitude() const { return latitude; } 
 
 std::ostream& operator<<(std::ostream& os, const City& c) {
-    os << c.city << ", " << c.country << " (Pop: " << c.population << ", Lat: " << c.latitude << ")";
+    os << c.city << ", " << c.country << ", " << c.population << ", " << c.latitude;
     return os;
 }

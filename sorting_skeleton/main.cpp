@@ -17,6 +17,7 @@
 #include <functional>
 #include <iomanip>
 #include <fstream>
+#include <cassert>
 
 
 #include "Timer.h"
@@ -111,8 +112,7 @@ std::vector<City> loadCities(const std::string& filename) {
             try { popu = static_cast<long>(std::stoll(fields[9])); } 
             catch (...) {popu = 0;}
     }
-
-        cities.emplace_back(city, country, lat, popu);
+        cities.emplace_back(city, country, popu, lat);
     }
 
     file.close();
@@ -139,6 +139,7 @@ std::vector<City> loadCities(const std::string& filename) {
 //                        const std::vector<City>& masterData) {
 //     // Your code here
 // }
+
 void handleSortCommand(const std::string& algorithmName,
                        const std::string& fieldName,
                        const std::vector<City>& masterData) {
@@ -174,10 +175,10 @@ void handleSortCommand(const std::string& algorithmName,
     timer.start();
 
     if (algorithmName == "insertionSort") {
-        // insertionSort(dataCopy, comp);
+        insertionSort(dataCopy, comp);
         std::cout << "Insertion Sort not implemented yet." << std::endl;
     } else if (algorithmName == "mergeSort") {
-        // mergeSort(dataCopy, comp);
+        mergeSort(dataCopy, comp);
         std::cout << "Merge Sort not implemented yet." << std::endl;
     } else {
         std::cerr << "Error: Invalid algorithm name: " << algorithmName << std::endl;
@@ -198,6 +199,44 @@ void handleSortCommand(const std::string& algorithmName,
 
 }
 
+void runTests() {
+    std::cout << "Running cassert Tests..." << std::endl;
+
+    // 1. template generalityand edge cases
+    std::vector<int> intVec = {5, 1, 9, 3, 5, 111};
+    auto intComp = [](int a, int b) { return a < b; };
+
+    insertionSort(intVec, intComp);
+    assert(intVec == std::vector<int>({1, 3, 5, 5, 9, 111})); //correctness
+
+    intVec = {11};
+    mergeSort(intVec, intComp);
+    assert(intVec == std::vector<int>({11})); // single element edge case
+
+    intVec.clear();
+    mergeSort(intVec, intComp);
+    assert(intVec.empty()); // empty vector edge case
+
+    // 2 city correctness
+    std::vector<City> cities = {
+        City("CityA", "CountryX", 1000, 10.0),
+        City("CityB", "CountryY", 500, 20.0),
+    };
+
+    // test population descending
+    mergeSort(cities, [](const City& a, const City& b) {
+        return a.getPopulation() > b.getPopulation();
+    });
+    assert(cities[0].getCity() == "CityA" && cities[1].getCity() == "CityB");
+
+    //test city name ascending
+    insertionSort(cities, [](const City& a, const City& b) {
+        return a.getCity() < b.getCity();
+    });
+    assert(cities[0].getCity() == "CityA" && cities[1].getCity() == "CityB");
+
+    std::cout << "All tests passed!" << std::endl;
+}
 
 int main() {
     // Show timer example (you can remove this later)
