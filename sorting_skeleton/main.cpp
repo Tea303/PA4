@@ -17,10 +17,11 @@
 #include <functional>
 #include <iomanip>
 
+
 #include "Timer.h"
 
 // TODO: #include your City.h and Sorting.h headers here
-
+#include "City.h"
 
 // ----------------------------------------------------------------
 // Timer usage example (delete this function once you understand it)
@@ -71,6 +72,16 @@ int main() {
     //       Example:
     //   std::vector<City> cities = loadCities("worldcities.csv");
     //   std::cout << "Loaded " << cities.size() << " cities." << std::endl;
+
+    std::cout << "Loading dataset" << std::endl;
+    
+    std::vector<City> cities = loadCities("worldcities.csv");
+    
+    if (cities.empty()) {
+        std::cerr << "Error...Failed to load dataset or dataset is empty." << std::endl;
+        return 1;
+    }
+    std::cout << "Successfully loaded " << cities.size() << " cities.\n" << std::endl;
 
     // ---- REPL: Do not modify below this line ----
 
@@ -124,6 +135,8 @@ int main() {
 
         // TODO: Call your handleSortCommand function here.
         //   handleSortCommand(algorithm, field, cities);
+        handleSortCommand(algorithm, field, cities);
+
 
         std::cout << std::endl;
     }
