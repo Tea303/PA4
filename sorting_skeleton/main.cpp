@@ -239,10 +239,10 @@ void runTests() {
 }
 
 int main() {
-    // Show timer example (you can remove this later)
-    timerExample();
-    std::cout << std::endl;
+  
 
+    runTests(); // Run tests before starting REPL
+    
     // TODO: Load the CSV dataset into a container of your choice.
     //       Example:
     //   std::vector<City> cities = loadCities("worldcities.csv");
