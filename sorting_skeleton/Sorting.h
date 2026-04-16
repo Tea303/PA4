@@ -72,8 +72,24 @@ void merge(std::vector<T>& data, int left, int mid, int right, Comparator comp) 
     }
 }
 
+template <typename T, typename Comparator>
+void mergeSortHelper(std::vector<T>& data, int left, int right, Comparator comp) {
+    if (left >= right) return;
 
+    int mid = left + (right - left) / 2;
 
+    // sort first and second halves
+    mergeSortHelper(data, left, mid, comp);
+    mergeSortHelper(data, mid + 1, right, comp);
+
+    // merge sorted halves
+    merge(data, left, mid, right, comp);
+}
+
+template <typename T, typename Comparator>
+void mergeSort(std::vector<T>& data, Comparator comp) {
+    mergeSortHelper(data, 0, data.size() - 1, comp);
+}
 
 
 #endif
