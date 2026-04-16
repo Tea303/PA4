@@ -12,17 +12,17 @@ private:
     double latitude;
 
 public:
-    //constructors...
+    // constructors...
     City();
     City(std::string city, std::string country, long population, double latitude);
 
-    //getters...
+    // getters...
     std::string getCity() const;
     std::string getCountry() const;
     long getPopulation() const;
     double getLatitude() const;
 
-    //operator overload...
+    // operator overload...
     friend std::ostream& operator<<(std::ostream& os, const City& c);
 };
 
