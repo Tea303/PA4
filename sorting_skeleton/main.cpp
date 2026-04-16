@@ -49,6 +49,31 @@ void timerExample() {
 // CSV parsing utility
 //----------------------------------------------------------------
 
+// helper func to parse a single CSV line cautious to quotes and stuff
+std::vector<std::string> parseCSVLine(const std::string& line) {
+    std::vector<std::string> fields;
+    std::string currentField = "";
+    bool inQuotes = false;
+
+    for (size_t i = 0; i < line.length(); ++i) {
+        char c = line[i];
+
+        if (c == '\"') {
+            inQuotes = !inQuotes; // toggle into quote state
+        } else if (c == ',' && !inQuotes) {
+            // found comma out of quotes so we end field
+            fields.push_back(currentField);
+            currentField = "";
+        } else {
+            currentField += c; // append a char
+        }
+    }
+    fields.push_back(currentField); // add last field
+    return fields;
+}
+
+
+
 //func to load the CSV into a vector of City
 std::vector<City> loadCities(const std::string& filename) {
     std::vector<City> cities;
@@ -93,6 +118,8 @@ std::vector<City> loadCities(const std::string& filename) {
     file.close();
     return cities;
 }
+
+
 
 // ----------------------------------------------------------------
 // TODO: Implement handleSortCommand
